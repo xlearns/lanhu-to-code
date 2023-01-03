@@ -17,7 +17,8 @@ function download() {
 	Array.from(imageUrls.value).forEach((image, index) => {
 		setTimeout(() => {
 			downloadImage(image.slice(42) + ".png", image);
-		}, index * 1000);
+			// index >= 100 can be downloaded successfully why??
+		}, index * 100);
 	});
 }
 
