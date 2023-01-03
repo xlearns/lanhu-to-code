@@ -10,11 +10,14 @@
   },
   "dependencies": {
     "@dataview/datav-vue3": "^0.0.0-test.1672506674342",
+    "axios": "^1.2.2",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "vite": "^4.0.0"
   }
 }

@@ -1,10 +1,6 @@
 <script setup>
 import { ref, watch, reactive } from "vue";
-import JSZip from "jszip";
-import axios from "axios";
-import { saveAs } from "file-saver";
 const text = ref();
-const zip = new JSZip();
 const transformText = ref();
 const state = reactive({
   assetsPath: "../assets/test",
@@ -14,29 +10,39 @@ const state = reactive({
 const finishDownload = ref([]);
 const imageUrls = ref();
 
-async function download() {
+function download() {
   state.count = 0;
   finishDownload.value = [];
-  await Promise.all(
-    Array.from(imageUrls.value).map(async (image) => {
-      try {
-        const name = image.slice(42) + state.assetsType;
-        const file = await getFileData(image);
-        return zip.file(name, file, { binary: true });
-      } catch (e) {
-        console.error(e);
-      }
-    })
-  );
 
-  zip.generateAsync({ type: "blob" }).then(function (content) {
-    saveAs(content, "images.zip");
+  Array.from(imageUrls.value).forEach((image, index) => {
+    setTimeout(() => {
+      downloadImage(image.slice(42) + ".png", image);
+      // index >= 100 can be downloaded successfully why??
+    }, index * 100);
   });
 }
 
-async function getFileData(url) {
-  const { data } = await axios({ url, responseType: "arraybuffer" });
-  return data;
+function downloadImage(filename, url) {
+  // return console.log(url);
+  fetch(url)
+    .then((res) => res.blob())
+    .then((blob) => {
+      // create URL and Link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+
+      // Invoke download
+      a.click();
+
+      // remove URL and Link
+      window.URL.revokeObjectURL(url);
+      a.remove();
+      state.count++;
+    })
+    .catch((err) => console.error(err.message));
 }
 
 function transformMain() {
@@ -59,7 +65,7 @@ watch(
 <template>
   <div class="home">
     <div>
-      <button @click="download">批量下载</button> 总共
+      <button @click="download">批量下载</button> 总共{{ state.count }} /
       {{ imageUrls ? imageUrls.size : 0 }}
     </div>
     <div class="mt-10">
