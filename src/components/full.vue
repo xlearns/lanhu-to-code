@@ -93,7 +93,7 @@ export default {
 			await init();
 			updateSize();
 			updateScale();
-			window.addEventListener("resize", debounce(100, onResize));
+			window.addEventListener("resize", onResize);
 			initMutationObserver();
 			ready.value = true;
 		});
