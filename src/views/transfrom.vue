@@ -39,8 +39,9 @@ async function getFileData(url) {
 	const { data } = await axios({ url, responseType: "arraybuffer" });
 	return data;
 }
+// https://lanhu-dds-backend.oss-cn-beijing.aliyuncs.com
 
-function transformMain(type) {
+function transformMain(config = {}) {
 	const str = text.value;
 	const imgReg = /https:\/\/lanhu\.oss-cn-beijing\.aliyuncs\.com([^"()\s]*)/gi;
 
@@ -50,11 +51,7 @@ function transformMain(type) {
 		return state.assetsPath + r + state.assetsType;
 	});
 
-	if (type == "datav") {
-		transformText.value = parseVue(transformText.value, "datav");
-	} else {
-		transformText.value = parseVue(transformText.value);
-	}
+	transformText.value = parseVue(transformText.value, config);
 }
 watch(
 	() => [text.value],
@@ -75,8 +72,20 @@ watch(
 			资源后缀<input v-model="state.assetsType" />
 		</div>
 		<div class="mt-10 mb-10">
-			<button @click="transformMain">转换</button>
-			<button @click="transformMain('datav')" class="ml-5">大屏转换</button>
+			<p>css:</p>
+			<button @click="transformMain({ style: { type: 'filterHeight' } })">
+				除了height单位转换
+			</button>
+		</div>
+		<div class="mt-10 mb-10">
+			<p>page:</p>
+			<button @click="transformMain">普通转换</button>
+			<button @click="transformMain({ type: 'datav-no' })" class="ml-5">
+				大屏转换【一屏幕,不带滚动条】
+			</button>
+			<button @click="transformMain({ type: 'datav-yes' })" class="ml-5">
+				大屏转换【带滚动条】
+			</button>
 		</div>
 		<textarea v-model="text" rows="30" cols="90" class="box" />
 		<textarea v-model="transformText" rows="30" cols="90" class="box" />

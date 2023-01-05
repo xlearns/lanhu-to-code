@@ -1,5 +1,5 @@
 export const data = {
-  "datav":{
+  datav:{
     script:`import Full from "../components/full.vue";
     import { ref, onMounted, reactive } from "vue";
     const dom = ref();
@@ -28,7 +28,7 @@ export const data = {
   },
   default:{
     script:`
-    import {ref,onMounted} from 'vue'
+    import {ref,onMounted,reactive} from 'vue'
     const state = reactive({})
     function init(){
       console.log('ok')
@@ -36,6 +36,30 @@ export const data = {
     onMounted(()=>{
       init()
     })
+    `
+  },
+  datavscroll:{
+    style:`.big-view{
+      height: 100%;
+      width: 100%;
+    }
+    .wrap {
+      height: calc(100vh - 0px);
+      overflow: auto;
+      box-sizing: border-box;
+    }
+    .wrap::-webkit-scrollbar {
+      width: 8px;
+    }
+    .wrap::-webkit-scrollbar-thumb {
+      width: 8px;
+      border-radius: 4px;
+      background-color: #ede7f8;
+    }
+    .home {
+      height: 100%;
+      position: relative;
+    }
     `
   }
 }
